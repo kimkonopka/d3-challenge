@@ -1,12 +1,12 @@
 // basic settings
-var svgWidth = 900;
-var svgHeight = 550;
+var svgWidth = 800;
+var svgHeight = 900;
 
 var margin = {
-  top: 20,
-  right: 40,
-  bottom: 80,
-  left: 100
+  top: 30,
+  right: 30,
+  bottom: 70,
+  left: 70
 };
 
 var width = svgWidth - margin.left - margin.right;
@@ -22,10 +22,10 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
-d3.csv("/assets/data/data.csv").then(function(myData) {
+d3.csv("/assets/data/data.csv").then(function(healthData) {
     
  
-    myData.forEach(function(xdata) {
+    healthData.forEach(function(xdata) {
         xdata.poverty = +xdata.poverty;
         xdata.healthcare = +xdata.healthcare;
     
@@ -33,13 +33,13 @@ d3.csv("/assets/data/data.csv").then(function(myData) {
 
 
     var xLinearScale = d3.scaleLinear()
-        .domain([d3.min(myData, d=>d.poverty)*1, 
-            d3.max(myData, d => d.poverty)*1])
+        .domain([d3.min(healthData, d=>d.poverty)*1, 
+            d3.max(healthData, d => d.poverty)*1])
         .range([0, width]);
 
 
     var yLinearScale = d3.scaleLinear()
-        .domain([0, d3.max(myData, d => d.healthcare)*1])
+        .domain([0, d3.max(healthData, d => d.healthcare)*1])
         .range([height, 0]);
 
    
@@ -55,7 +55,7 @@ d3.csv("/assets/data/data.csv").then(function(myData) {
         .call(leftAxis);
   
     chartGroup.selectAll("circle")
-        .data(myData)
+        .data(healthData)
         .enter()
         .append("circle")
         .attr("cx", d => xLinearScale(d.poverty))
@@ -66,7 +66,7 @@ d3.csv("/assets/data/data.csv").then(function(myData) {
 
     
     chartGroup.selectAll("text.text-circles")
-        .data(myData)
+        .data(healthData)
         .enter()
         .append("text")
         .classed("text-circles",true)
@@ -85,8 +85,8 @@ d3.csv("/assets/data/data.csv").then(function(myData) {
 
   
     chartGroup.append("text")
-        .attr("y", height + margin.bottom/1 - 5)
-        .attr("x", width / 2)
+        .attr("y", height + margin.bottom)
+        .attr("x", width)
         .text("In Poverty (%)");
 
 
